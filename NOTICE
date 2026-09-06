@@ -1,0 +1,7 @@
+Visible Value
+Copyright 2026 Opsle contributors
+
+schema/value-receipt-v1.schema.json is reproduced from opsle/research,
+program/schemas/value-receipt-v1.schema.json, introduced at 84c5529,
+under the Apache License 2.0. Receipt semantics follow that repository's
+program/VISIBLE_VALUE_CONTRACT.md. No other repository is needed at runtime.

@@ -1,0 +1,18 @@
+{
+  "schema": "opsle.visible-value.input.v1",
+  "receipts": [{
+    "schema": "opsle.value-receipt.v1",
+    "mechanism": { "id": "opsle.example", "name": "Example", "version": "1.0.0", "revision": "fixture-v1" },
+    "run": { "id": "run-001" },
+    "operation": { "id": "op-001", "name": "compare-bytes", "configuration_id": "fixture-v1", "policy_id": null },
+    "measurements": [{
+      "id": "visible_bytes", "baseline": 20, "result": 30, "delta": 10,
+      "unit": "byte", "direction": "LOWER_IS_VALUE", "class": "EXACT",
+      "evidence_refs": ["fixture"], "source_verification": "VERIFIED", "operator_display": true,
+      "aggregation": { "safe": true, "method": "SUM" }, "derivation": null,
+      "limitations": ["Synthetic example, not a production observation."]
+    }],
+    "evidence": [{ "id": "fixture", "kind": "CALLER_ASSERTION", "locator": "example fixture: 20 raw bytes and 30 output bytes", "trust": "VERIFIED" }],
+    "limitations": ["Synthetic example demonstrating expansion; no savings claim."]
+  }]
+}

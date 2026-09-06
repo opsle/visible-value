@@ -1,0 +1,14 @@
+{
+  "name": "@opsle/visible-value",
+  "version": "0.1.0",
+  "description": "Deterministic validation and operator summaries for Opsle value receipts.",
+  "type": "module",
+  "exports": "./src/index.js",
+  "bin": { "visible-value": "bin/visible-value.js" },
+  "files": ["src", "bin", "schema", "examples", "README.md", "NOTICE", "LICENSE"],
+  "scripts": { "test": "node --test", "example": "node bin/visible-value.js summarize examples/run.json" },
+  "engines": { "node": ">=22" },
+  "dependencies": { "ajv": "8.17.1", "ajv-formats": "3.0.1" },
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "https://github.com/opsle/visible-value.git" }
+}

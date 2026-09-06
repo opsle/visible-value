@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/opsle/research/program/schemas/value-receipt-v1.schema.json",
+  "title": "Opsle Visible Value receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "mechanism", "run", "operation", "measurements", "evidence", "limitations"],
+  "properties": {
+    "schema": { "const": "opsle.value-receipt.v1" },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "version", "revision"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^opsle\\.[a-z0-9-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "revision": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": ["string", "null"], "minLength": 1 },
+        "task_classification": { "type": ["string", "null"], "minLength": 1 },
+        "work_classification": { "type": ["string", "null"], "minLength": 1 },
+        "repository": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "configuration_id", "policy_id"],
+      "properties": {
+        "id": { "type": ["string", "null"], "minLength": 1 },
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "configuration_id": { "type": ["string", "null"], "minLength": 1 },
+        "policy_id": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "measurements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/measurement" }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "extensions": { "type": "object" }
+  },
+  "$defs": {
+    "value": { "type": ["number", "string", "boolean", "null"] },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "locator", "trust"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$" },
+        "kind": { "enum": ["CONTENT_HASH", "JSON_POINTER", "RUN_ARTIFACT", "PROVIDER_RECORD", "URI", "CALLER_ASSERTION"] },
+        "locator": { "type": "string", "minLength": 1 },
+        "trust": { "enum": ["VERIFIED", "OBSERVED", "CALLER_SUPPLIED", "UNVERIFIED", "NOT_APPLICABLE"] }
+      }
+    },
+    "derivation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["method", "assumptions", "input_measurement_ids", "experiment_id", "comparability"],
+      "properties": {
+        "method": { "type": ["string", "null"], "minLength": 1 },
+        "assumptions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "input_measurement_ids": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" } },
+        "experiment_id": { "type": ["string", "null"], "minLength": 1 },
+        "comparability": { "enum": ["NOT_APPLICABLE", "NOT_COMPARABLE", "CONTROLLED"] }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "baseline", "result", "delta", "unit", "direction", "class", "evidence_refs", "source_verification", "operator_display", "aggregation", "derivation", "limitations"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "baseline": { "$ref": "#/$defs/value" },
+        "result": { "$ref": "#/$defs/value" },
+        "delta": { "$ref": "#/$defs/value" },
+        "unit": { "enum": ["byte", "event", "count", "ratio", "percent", "boolean", "millisecond", "token", "usd", "state"] },
+        "direction": { "enum": ["HIGHER_IS_VALUE", "LOWER_IS_VALUE", "NEUTRAL", "PROTECTION_SIGNAL", "NOT_APPLICABLE"] },
+        "class": { "enum": ["EXACT", "OBSERVED", "ESTIMATED", "MODELED", "EXPERIMENTAL"] },
+        "evidence_refs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "source_verification": { "enum": ["VERIFIED", "OBSERVED", "CALLER_SUPPLIED", "UNVERIFIED", "NOT_APPLICABLE"] },
+        "operator_display": { "type": "boolean" },
+        "aggregation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["safe", "method"],
+          "properties": {
+            "safe": { "type": "boolean" },
+            "method": { "enum": ["SUM", null] }
+          }
+        },
+        "derivation": { "$ref": "#/$defs/derivation" },
+        "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}
